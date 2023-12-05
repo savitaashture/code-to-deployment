@@ -13,9 +13,10 @@ kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/master/manif
 ```
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj-labs/argocd-image-updater/stable/manifests/install.yaml
 ```
+# Update the Config maps of ArgoCD to add new user and role for image updater
 ```
-kubectl patch cm/argocd-cm --type=merge -p='{"data":{"accounts.image-updater":"apiKey"}}'
-k patch cm/argocd-rbac-cm --type=merge -p='{"data":{"policy.csv":"p, role:image-updater, applications, get, */*, allow\np, role:image-updater, applications, update, */*, allow\ng, image-updater, role:image-updater"}}'
+kubectl patch cm/argocd-cm -n argocd --type=merge -p='{"data":{"accounts.image-updater":"apiKey"}}'
+k patch cm/argocd-rbac-cm -n argocd --type=merge -p='{"data":{"policy.csv":"p, role:image-updater, applications, get, */*, allow\np, role:image-updater, applications, update, */*, allow\ng, image-updater, role:image-updater"}}'
 ```
 ```
 kubectl port-forward -n argocd svc/argocd-server 8443:443 > /dev/null 2>&1 &
@@ -23,12 +24,37 @@ ADMIN_PASSWD=$(kubectl get secret argocd-initial-admin-secret -o jsonpath='{.dat
 argocd login --username admin --password ${ADMIN_PASSWD} localhost:8443
 IMAGE_UPDATER_TOKEN=$(argocd account generate-token --account image-updater --id image-updater)
 kubectl create secret generic argocd-image-updater-secret \
-  --from-literal argocd.token=${IMAGE_UPDATER_TOKEN} --dry-run=client -o yaml |
-  kubectl -n argocd apply -f - 
+  --from-literal argocd.token=${IMAGE_UPDATER_TOKEN} --dry-run=client -o yaml | kubectl -n argocd apply -f - 
 ```
 
 # Install KyVerno
 ```
+kubectl create -f https://github.com/kyverno/kyverno/releases/download/v1.10.0/install.yaml -n kyverno
 ```
 
 # Install KyVerno Image Signing policies
+
+```
+
+```
+
+# Install Sigstore Policy Controller
+
+```
+kubectl create namespace cosign-system
+helm repo add sigstore https://sigstore.github.io/helm-charts
+helm repo update
+helm install policy-controller -n cosign-system sigstore/policy-controller --devel
+```
+
+# Wait for the policy controller to be available
+```
+kubectl -n cosign-system wait --for=condition=Available deployment/policy-controller-webhook && \
+kubectl -n cosign-system wait --for=condition=Available deployment/policy-controller-webhook
+```
+
+# Enable guestbook namespace in image validation and policy enforcement
+```
+kubectl create ns guestbook
+kubectl label namespace guestbook policy.sigstore.dev/include=true
+```
