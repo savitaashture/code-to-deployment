@@ -21,7 +21,7 @@ k patch cm/argocd-rbac-cm -n argocd --type=merge -p='{"data":{"policy.csv":"p, r
 ```
 kubectl port-forward -n argocd svc/argocd-server 8443:443 > /dev/null 2>&1 &
 ADMIN_PASSWD=$(kubectl get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' -n argocd | base64 -d)
-argocd login --username admin --password ${ADMIN_PASSWD} localhost:8443
+argocd login --username admin --password ${ADMIN_PASSWD} localhost:8443 --insecure
 IMAGE_UPDATER_TOKEN=$(argocd account generate-token --account image-updater --id image-updater)
 kubectl create secret generic argocd-image-updater-secret \
   --from-literal argocd.token=${IMAGE_UPDATER_TOKEN} --dry-run=client -o yaml | kubectl -n argocd apply -f - 

@@ -5,9 +5,12 @@ metadata:
 spec:
   replicas: 2
   template:
+    metadata:
+      labels:
+        app: kubeday-app
     spec:
-    containers:
-      - name: kubeday-app
-        image: quay.io/savitaashture/kaniko-chains:main
-        ports:
-          - containerPort: 80
+      containers:
+        - name: kubeday-app
+          image: quay.io/savitaashture/kubeday-app:main
+          ports:
+            - containerPort: 80
