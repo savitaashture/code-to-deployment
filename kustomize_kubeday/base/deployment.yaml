@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubeday-app
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: kubeday-app
+  template:
+    metadata:
+      labels:
+        app: kubeday-app
+    spec:
+      containers:
+      - image: quay.io/savitaashture/kubeday-app:main
+        name: kubeday-app
+        ports:
+        - containerPort: 80
