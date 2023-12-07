@@ -6,9 +6,17 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/anandf/code-to-deployment.git
+    repoURL: 'https://github.com/anandf/code-to-deployment.git'
+    path: kustomize_kubeday/overlays/integ
     targetRevision: HEAD
-    path: kubeday-app/overlays/integ
+    kustomize:
+      images:
+        - >-
+          quay.io/savitaashture/kaniko-chains=http://quay.io/savitaashture/kubeday-app:main
   destination:
-    server: https://kubernetes.default.svc
+    server: 'https://kubernetes.default.svc'
     namespace: kubeday-integ
+  syncPolicy:
+    automated: {}
+    syncOptions:
+      - CreateNamespace=true
