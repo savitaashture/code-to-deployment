@@ -12,7 +12,7 @@ spec:
     kustomize:
       images:
         - >-
-          quay.io/savitaashture/kaniko-chains=http://quay.io/savitaashture/kubeday-app:main
+          KUBEDAY_IMAGE=http://quay.io/savitaashture/kubeday-app:main
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: kubeday-integ
