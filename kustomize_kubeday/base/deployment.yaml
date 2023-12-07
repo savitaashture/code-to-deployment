@@ -14,7 +14,7 @@ spec:
         app: kubeday-app
     spec:
       containers:
-      - image: ${KUBEDAY_IMAGE}
+      - image: KUBEDAY_IMAGE
         name: kubeday-app
         ports:
         - containerPort: 80
