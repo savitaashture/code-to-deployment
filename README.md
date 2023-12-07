@@ -26,6 +26,16 @@ IMAGE_UPDATER_TOKEN=$(argocd account generate-token --account image-updater --id
 kubectl create secret generic argocd-image-updater-secret \
   --from-literal argocd.token=${IMAGE_UPDATER_TOKEN} --dry-run=client -o yaml | kubectl -n argocd apply -f - 
 ```
+```
+kubectl patch cm argocd-image-updater-config -n argocd --type=merge -p '{"data":{"log.level":"debug"}}'
+```
+
+
+# Install ImageUpdater CLI for debugging
+```
+wget https://github.com/argoproj-labs/argocd-image-updater/releases/download/v0.12.2/argocd-image-updater-$(go env GOOS)_$(go env GOARCH) -O ~/bin/argocd-image-updater
+sudo chmod +x ~/bin/argocd-image-updater
+```
 
 # Install KyVerno
 ```
@@ -35,7 +45,7 @@ kubectl create -f https://github.com/kyverno/kyverno/releases/download/v1.10.0/i
 # Install KyVerno Image Signing policies
 
 ```
-
+NA
 ```
 
 # Install Sigstore Policy Controller
@@ -57,4 +67,9 @@ kubectl -n cosign-system wait --for=condition=Available deployment/policy-contro
 ```
 kubectl create ns guestbook
 kubectl label namespace guestbook policy.sigstore.dev/include=true
+```
+
+```
+kubectl create ns kubeday-integ
+kubectl label namespace kubeday-integ policy.sigstore.dev/include=true
 ```
