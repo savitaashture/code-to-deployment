@@ -3,6 +3,10 @@ kind: Application
 metadata:
   name: kubeday-app-integ
   namespace: argocd
+  annotations:
+    argocd-image-updater.argoproj.io/KUBEDAY_IMAGE.update-strategy: digest
+    argocd-image-updater.argoproj.io/image-list: KUBEDAY_IMAGE=quay.io/savitaashture/kubeday-app:main
+    argocd-image-updater.argoproj.io/write-back-method: argocd
 spec:
   project: default
   source:

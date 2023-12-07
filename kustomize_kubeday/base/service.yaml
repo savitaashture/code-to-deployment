@@ -4,7 +4,7 @@ metadata:
   name: kubeday-app
 spec:	
   ports:	
-  - port: 80	
-    targetPort: 80	
+  - port: 8080
+    targetPort: 9999
   selector:	
     app: kubeday-app

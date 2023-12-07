@@ -11,7 +11,7 @@ kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/master/manif
 
 # Install ImageUpdater
 ```
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj-labs/argocd-image-updater/stable/manifests/install.yaml
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj-labs/argocd-image-updater/v0.12.2/manifests/install.yaml
 ```
 # Update the Config maps of ArgoCD to add new user and role for image updater
 ```
