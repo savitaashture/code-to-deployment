@@ -30,6 +30,11 @@ kubectl create secret generic argocd-image-updater-secret \
 kubectl patch cm argocd-image-updater-config -n argocd --type=merge -p '{"data":{"log.level":"debug"}}'
 ```
 
+# Install the argo application
+
+```
+kubectl create -f application_integ.yaml -n argocd
+```
 
 # Install ImageUpdater CLI for debugging
 ```
