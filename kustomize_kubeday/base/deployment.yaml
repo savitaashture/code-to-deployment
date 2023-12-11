@@ -16,5 +16,6 @@ spec:
       containers:
       - image: KUBEDAY_IMAGE
         name: kubeday-app
+        imagePullPolicy: always
         ports:
         - containerPort: 9999
